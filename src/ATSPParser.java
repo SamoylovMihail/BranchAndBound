@@ -5,8 +5,6 @@ import java.util.regex.Pattern;
 
 public class ATSPParser implements IATSPParser {
 	
-	//^(\d+\s+){16}\d+$
-	
 	private String name;
 	private String type;
 	private String comment;
@@ -14,6 +12,8 @@ public class ATSPParser implements IATSPParser {
 	private String edgeWeightType;
 	private String edgeWeightFormat;
 	private short[][] costMatrix;
+	
+	private int separator;
 	
 	public ATSPParser(String filename) {
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -41,17 +41,20 @@ public class ATSPParser implements IATSPParser {
 			costMatrix = new short[dimension + 1][dimension + 1];
 			br.readLine();
 			temp = br.readLine();
+			Pattern pattern = Pattern.compile("(\\d+)\\s*");
 			while (temp != null) {
 				if (j >= dimension + 1) {
 					i++;
 					j = 1;
 				}
 				
-				Pattern pattern = Pattern.compile("(\\d+)\\s*");
 				Matcher matcher = pattern.matcher(temp);
 				while (matcher.find()) {
 					int edgeWeight = Integer.parseInt(matcher.group(1));
-					if (edgeWeight == 9999) edgeWeight = 0;
+					if (i == 1 && j == 1) {
+						separator = edgeWeight;
+					}
+					if (edgeWeight == separator) edgeWeight = 0;
 					costMatrix[i][j] = (short) edgeWeight;
 					j++;
 				}
