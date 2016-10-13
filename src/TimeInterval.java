@@ -2,18 +2,16 @@
 public class TimeInterval {
 
 	private long timeMillisStart;
-	private long timeMillisEnd;
 	
 	public void startTiming() {
 		timeMillisStart = System.currentTimeMillis();
 	}
 
-	public void endTiming() {
-		timeMillisEnd = System.currentTimeMillis();
-	}
+	/* only for theft code compatibility */
+	public void endTiming() {}
 
 	public String getElapsedTime() {
-		return Long.toString((timeMillisEnd - timeMillisStart) / 1000);
+		return Long.toString((System.currentTimeMillis() - timeMillisStart) / 1000);
 	}
 
 }
